@@ -102,8 +102,10 @@ function pack_mod($mod) {
 
   if (Test-Path $mod\packed\) {
     & $pack_expl_path "$output_path\$mod.packed" add -s $mod\packed;
+    return;
   } else {
     & $pack_expl_path "$output_path\$mod.packed" add -s $mod\;
+    & $pack_expl_path "$output_path\$mod.packed" remove -d README.md;
   }
 }
 

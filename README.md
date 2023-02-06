@@ -55,7 +55,7 @@ There is 2 types of "configuration" of mod folder: *simple* and *with misc*
 
 ### Simple mod
 
-Everyting in mod folder will be packed in `.packed` file. That's it. Pretty
+Everyting in mod folder except `README.md` will be packed in `.packed` file. That's it. Pretty
 simple.
 
 ### Mod with misc
