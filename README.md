@@ -16,7 +16,7 @@ fire, start cancer or kill your dog. Use it on your own.
 	* [How to use](#how-to-use)
 * [Mods structure](#mods-structure)
     * [Simple mod](#simple-mod)
-    * [Mod with misc](#mod-with-misc)
+    * [Mod with custom text](#mod-with-custom-text)
 * [Existing mods](#existing-mods)
 * [Useful links](#useful-links)
 
@@ -78,21 +78,27 @@ There is 2 types of "configuration" of mod folder: *simple* and *with misc*
 Everything in mod folder except `README.md` will be packed in `.packed` file. That's it. Pretty
 simple.
 
-### Mod with misc
+### Mod with custom text
 
 ```
 ..
 ModFolder\
 |__ packed\
 |____ ...
-|__ misc\
+|__ lang\
 |____ ...
 ```
 
-Everything in `packed` folder will be packed in `.packed` file.
-Everything in `misc` folder will be copied to the game folder. If that file is
-already exists, original file will be backed-up and re-installed on its place on
-uninstalling mod.
+`packed` folder is your `ModName.packed`. Everything in it will be packed and
+loaded to the game's `Mods` folder
+
+`lang` folder is where yours files with custom text lines works. \
+File with custom text should be named just as file in `Scrapland\Languages\`,
+i.e. `English.txt`, `German.txt`, `Russan.txt` etc. \
+It should contains only new lines that you want to add.
+
+When mod loads script will save original text file, and it will append to it
+everything from all loaded mods, that have same `<Language>.txt` file.
 
 
 ## Existing mods:
