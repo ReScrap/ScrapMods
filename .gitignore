@@ -1,3 +1,4 @@
 *.pyc
 bins/
 out/
+config.ps1

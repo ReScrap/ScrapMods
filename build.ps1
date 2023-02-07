@@ -6,9 +6,15 @@ param(
   [Switch] $uninstall
 )
 
-$pack_expl_path = '.\bins\spe.exe';
-$pyhton_path    = 'C:\Program Files (x86)\Python\python.exe';
-$scrapland_path = 'D:\Games\SteamLibrary\steamapps\common\Scrapland';
+$packed_explorer_path = '.\bins\spe.exe';
+$pyhton_path          = 'C:\Program Files (x86)\Python\python.exe';
+$scrapland_path       = 'D:\Games\SteamLibrary\steamapps\common\Scrapland';
+
+if (-not (Test-Path(".\config.ps1"))) {
+  Copy-Item .\config.example.ps1 .\config.ps1;
+}
+
+. "$PSScriptRoot\config.ps1"
 
 $output_path    = ".\out"
 
@@ -47,13 +53,13 @@ function disable_colorded_output() {
 }
 
 function check_pack_expl() {
-  if (-not (test-path $pack_expl_path)) {
-    Write-Output "Error: $pack_expl_name was not found at '$pack_expl_path'. Please download $pack_expl_name >= $pack_expl_ver";
+  if (-not (test-path $packed_explorer_path)) {
+    Write-Output "Error: $pack_expl_name was not found at '$packed_explorer_path'. Please download $pack_expl_name >= $pack_expl_ver";
     exit 1;
   }
 
   # --version outputs to stderr;
-  $err = (& $pack_expl_path --version) 2>&1;
+  $err = (& $packed_explorer_path --version) 2>&1;
   $spe_version = $err[0].ToString();
 
   $null = $spe_version -match '(?<name>[^\d]+)(?<version>\d.+)';
@@ -65,7 +71,7 @@ function check_pack_expl() {
                        $version.Build -lt $pack_expl_ver.Build;
 
   if ($is_pack_expl_good) {
-    Write-Output "Error: wrong binary at '$pack_expl_path'. $name >= $version needed.";
+    Write-Output "Error: wrong binary at '$packed_explorer_path'. $name >= $version needed.";
     exit 1;
   }
 }
@@ -101,11 +107,11 @@ function pack_mod($mod) {
   quite_rm "$output_path\$mod.packed";
 
   if (Test-Path $mod\packed\) {
-    & $pack_expl_path "$output_path\$mod.packed" add -s $mod\packed;
+    & $packed_explorer_path "$output_path\$mod.packed" add -s $mod\packed;
     return;
   } else {
-    & $pack_expl_path "$output_path\$mod.packed" add -s $mod\;
-    & $pack_expl_path "$output_path\$mod.packed" remove -d README.md;
+    & $packed_explorer_path "$output_path\$mod.packed" add -s $mod\;
+    & $packed_explorer_path "$output_path\$mod.packed" remove -d README.md;
   }
 }
 
