@@ -9,10 +9,22 @@ import SAct
 import sys
 
 
+logger = None
+
+Scrap.Print("[STRNG][Police] 0" + "\n")
+
+try:
+	logger = __import__("Logger").Logger("Police")
+except Exception:
+	pass
 
 def log(msg):
-	Scrap.Print("[STRNG][Police] " + str(msg) + "\n")
+	if logger is not None:
+		logger.info(msg)
+	else:
+		Scrap.Print("[STRNG][Police] " + str(msg) + "\n")
 
+log("Starting module")
 
 # WARNING : Never import any pyhton source library at the start up!
 

@@ -1,8 +1,17 @@
 import Scrap,SInput,SNet,SWeap,SScorer,SVec
 
+logger = None
+
+try:
+	logger = __import__("Logger").Logger("Police")
+except Exception:
+	pass
 
 def log(msg):
-	Scrap.Print("[STRNG][PCMenu] " + msg + "\n")
+	if logger is not None:
+		logger.info(msg)
+	else:
+		Scrap.Print("[STRNG][PCMenu] " + str(msg) + "\n")
 
 
 log("Starting module")
@@ -10,10 +19,11 @@ log("Starting module")
 MOTD = ""
 
 Menu = None
-MyMenuLib = __import__("modsmenu")
-MyMenu = MyMenuLib.MyMenu
+MyMenuLib = __import__("MyMenu")
 
-log("Mods menu imported")
+log("MyMenu imported")
+
+MyMenu = MyMenuLib.MyMenu
 
 def AbortWaitRedefine(id):
 	global ControlMenuId

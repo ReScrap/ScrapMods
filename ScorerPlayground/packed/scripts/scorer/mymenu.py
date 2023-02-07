@@ -1,9 +1,17 @@
 import Scrap,SInput,SNet,SWeap,SScorer,SVec
 
+logger = None
+
+try:
+    logger = __import__("Logger").Logger("Police")
+except Exception:
+    pass
 
 def log(msg):
-	Scrap.Print("[STRNG][MyMenu] " + str(msg) + "\n")
-
+    if logger is not None:
+        logger.info(msg)
+    else:
+        Scrap.Print("[STRNG][MyMenu] " + str(msg) + "\n")
 
 log("Starting module")
 
@@ -34,11 +42,11 @@ def MyMenu(id, control):
     ResetToDefault()
 
     import Menu
-    log("Creating mods menu")
+    log("Creating cusom menu")
 
     Menu.StartNewMenu(id)
 
-    Menu.VerticalMenu(id, Scrap.GetLangStr("Menu_Options_Mods"),(
+    Menu.VerticalMenu(id, Scrap.GetLangStr("Menu_Options_MyMenu"),(
             [Scrap.GetLangStr("My_Menu_Test_Bool")    + ":", "MyMenu.TestBool"    ],
             [Scrap.GetLangStr("My_Menu_Test_Counter") + ":", "MyMenu.TestCounter" ],
             [Scrap.GetLangStr("My_Menu_Test_Slider")  + ":", "Menu.DummyFunc"       ],

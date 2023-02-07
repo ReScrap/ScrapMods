@@ -16,12 +16,7 @@
 
 import Scrap
 
-
-def log(msg):
-	Scrap.Print("[STRNG][INIT] " + msg + "\n")
-
-
-log('Init started')
+logger = None
 
 PlaySpacelords = not Scrap.IsApp(436180)  # 1 to activate the cross promotion
 ##################################
@@ -110,6 +105,17 @@ HasSuperDeal    = OffLineGame and sDealType and sDealType != "" and (UpperMap in
 OutMapSkip      = OffLineGame and (UpperMap in OUTMAPS)
 InMapSkip       = OffLineGame and (UpperMap in INMAPS)
 
+###### Preloading custom stuff ######
+Scrap.PreloadLibrary('Logger','Custom/Logger.pyc')
+
+import Logger
+logger = Logger.Logger('Loader')
+logger.info('Logger initialized')
+logger.debug(logger)
+
+logger.info('Preloading MyMenu...')
+Scrap.PreloadLibrary('MyMenu','Scorer/MyMenu.pyc')
+logger.info('MyMenu preloaded')
 
 #Scrap.PreloadLibrary('QuickConsole','QuickConsole.pyc') # QuickConsole no es una libreria para el sistema
 
@@ -118,10 +124,6 @@ Scrap.PreloadLibrary('Items','Items.pyc')
 Scrap.PreloadLibrary('SaveGame','SaveGame.pyc')
 
 ###### Sistema de menues y scorer ######
-log('Preloading ModsMenu')
-Scrap.PreloadLibrary('MyMenu','Scorer/MyMenu.pyc')
-log('ModsMenu preload injected')
-
 if (Scrap.Get("IsXbox") == 1):
 	Scrap.PreloadLibrary('XBMenu','Scorer/XBMenu.pyc')
 else:
