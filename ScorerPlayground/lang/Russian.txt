@@ -1,0 +1,4 @@
+Menu_Options_MyMenu	My custom options menu
+My_Menu_Test_Bool	Test Boolean
+My_Menu_Test_Counter	Test Counter
+My_Menu_Test_Slider	Test Slider

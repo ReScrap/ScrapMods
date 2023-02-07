@@ -52,6 +52,12 @@ function disable_colorded_output() {
   $PSStyle.OutputRendering = [System.Management.Automation.OutputRendering]::PlainText;
 }
 
+function normalize_mod_name($mod) {
+  $mod = $mod.TrimEnd("\");
+  $mod = $mod.TrimStart(".\");
+  return $mod;
+}
+
 function check_pack_expl() {
   if (-not (test-path $packed_explorer_path)) {
     Write-Output "Error: $pack_expl_name was not found at '$packed_explorer_path'. Please download $pack_expl_name >= $pack_expl_ver";
@@ -126,17 +132,45 @@ function unload_mod($mod) {
   }
 }
 
-# TODO: Not just copy. Copy original file and add content of misc to the end
-function load_misc($mod) {
-  if (-not (Test-Path $mod\miscs\)) {
-    return
+function load_mod_languages($mod) {
+  if (-not (Test-Path $mod\lang\)) {
+    return;
   }
 
-  Copy-Item -Path $mod\mics\* -Destination $scrapland_path\ -Recurse -Force;
+  $mod_lang_folder = "$scrapland_path\Language\$mod";
+
+  if (-not (Test-Path $mod_lang_folder)) {
+    mkdir $mod_lang_folder | Out-Null;
+  }
+
+  Copy-Item $mod\lang\* $mod_lang_folder;
 }
 
-# TODO:
-function unload_misc($mod) {
+function unload_mod_languages($mod) {
+  if (-not (Test-Path $mod\lang\)) {
+    return;
+  }
+
+  Remove-Item -Recurse "$scrapland_path\Language\$mod\";
+}
+
+function build_game_languages() {
+  $lang_path = "$scrapland_path\Language";
+
+  Get-ChildItem $lang_path -File -Filter *.txt.bak | ForEach-Object {
+    Copy-Item $_ ($_.FullName.Replace(".bak", "")) -Force
+  }
+
+  Get-ChildItem $lang_path -Directory | ForEach-Object {
+    Get-ChildItem $_ -Filter *.txt | ForEach-Object {
+      if (-not (Test-Path "$lang_path\$($_.Name).bak")) {
+        Copy-Item "$lang_path\$($_.Name)" "$lang_path\$($_.Name).bak" -Force;
+        Write-Output "" >> $lang_path\$($_.Name);
+      }
+
+      Get-Content $_ >> $lang_path\$($_.Name);
+    }
+  }
 }
 
 function build_mod($mod) {
@@ -146,12 +180,12 @@ function build_mod($mod) {
 
 function install_mod($mod) {
   load_mod($mod);
-  load_misc($mod);
+  load_mod_languages($mod);
 }
 
 function uninstall_mod($mod) {
   unload_mod($mod);
-  unload_misc($mod);
+  unload_mod_languages($mod);
 }
 
 function make_all_mods() {
@@ -181,9 +215,11 @@ function make_mod($mod) {
 function main() {
   disable_colorded_output;
   check_pack_expl;
+  $mod_folder = normalize_mod_name($mod_folder);
 
   if (-not $mod_folder) {
     if ($uninstall) { uninstall_all_mods; } else { make_all_mods; }
+    build_game_languages;
     return;
   }
 
@@ -193,6 +229,7 @@ function main() {
   }
 
   if ($uninstall) { uninstall_mod($mod_folder); } else { make_mod($mod_folder); }
+  build_game_languages;
 }
 
 main
