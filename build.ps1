@@ -164,8 +164,8 @@ function build_game_languages() {
   Get-ChildItem $lang_path -Directory | ForEach-Object {
     Get-ChildItem $_ -Filter *.txt | ForEach-Object {
       if (-not (Test-Path "$lang_path\$($_.Name).bak")) {
-        Copy-Item "$lang_path\$($_.Name)" "$lang_path\$($_.Name).bak" -Force;
         Write-Output "" >> $lang_path\$($_.Name);
+        Copy-Item "$lang_path\$($_.Name)" "$lang_path\$($_.Name).bak" -Force;
       }
 
       Get-Content $_ >> $lang_path\$($_.Name);
