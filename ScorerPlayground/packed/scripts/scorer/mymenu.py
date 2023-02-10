@@ -3,15 +3,24 @@ import Scrap,SInput,SNet,SWeap,SScorer,SVec
 logger = None
 
 try:
-    logger = __import__("Logger").Logger("Police")
+    logger = __import__("Logger").Logger("MyMenu")
 except Exception:
     pass
 
-def log(msg):
+def log(*args):
     if logger is not None:
-        logger.info(msg)
+        logger.info(args)
     else:
-        Scrap.Print("[STRNG][MyMenu] " + str(msg) + "\n")
+        args = list(args)
+
+        for i in range(len(args)):
+            args[i] = str(args[i])
+            if args[i] == None:
+                args[i] = ""
+
+        args = ["[MyMenu]"] + args
+        msg = string.join(args, " ")
+        Scrap.Print(msg + "\n")
 
 log("Starting module")
 
@@ -50,6 +59,7 @@ def MyMenu(id, control):
             [Scrap.GetLangStr("My_Menu_Test_Bool")    + ":", "MyMenu.TestBool"    ],
             [Scrap.GetLangStr("My_Menu_Test_Counter") + ":", "MyMenu.TestCounter" ],
             [Scrap.GetLangStr("My_Menu_Test_Slider")  + ":", "Menu.DummyFunc"       ],
+            [Scrap.GetLangStr("BlurMenu_Menu"),"BlurMenu.BlurMenu"],
             [Scrap.GetLangStr("Menu_Back"),"Menu.OptionsMenu"]),
         "Menu.OptionsMenu", XStart = 310, VerticalStep = 36, YStart = Menu.OptionMenuYStart, Font = "ScrapMedium")
 
@@ -152,7 +162,7 @@ def TestSlider_Change(id, control):
     SetState('test_slider', SScorer.Get(id, 'TestSlider', 'Value'))
 
 def TestSlider_Sub(id, control, prevcontrol):
-    log('TestSlider_Sub')
+    log(id, control, prevcontrol)
     value      = SScorer.Get(id, 'TestSlider', 'Value')
     value_step = SScorer.Get(id, 'TestSlider', 'ValueStep')
     result     = value - value_step
@@ -162,7 +172,7 @@ def TestSlider_Sub(id, control, prevcontrol):
     SScorer.SetDefault(id,prevcontrol)
 
 def TestSlider_Add(id, control, prevcontrol):
-    log('TestSlider_Add')
+    log(id, control, prevcontrol)
     value      = SScorer.Get(id, 'TestSlider', 'Value')
     value_step = SScorer.Get(id, 'TestSlider', 'ValueStep')
     result     = value + value_step

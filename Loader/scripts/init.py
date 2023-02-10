@@ -113,6 +113,10 @@ logger = Logger.Logger('Loader')
 logger.info('Logger initialized')
 logger.debug(logger)
 
+logger.info('Preloading Blur Menu...')
+Scrap.PreloadLibrary('BlurMenu','Scorer/BlurMenu.pyc')
+logger.info('Blur Menu preloaded')
+
 logger.info('Preloading MyMenu...')
 Scrap.PreloadLibrary('MyMenu','Scorer/MyMenu.pyc')
 logger.info('MyMenu preloaded')

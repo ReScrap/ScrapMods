@@ -3,7 +3,7 @@ import Scrap,SInput,SNet,SWeap,SScorer,SVec
 logger = None
 
 try:
-	logger = __import__("Logger").Logger("Police")
+	logger = __import__("Logger").Logger("PCMenu")
 except Exception:
 	pass
 
